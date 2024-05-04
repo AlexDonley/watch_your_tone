@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <title>Watch Your Tone</title>
+</head>
+<body>
+    English to Zhuyin keystrokes
+    <div id="keyboardInput"></div>
+    <div id="inputToZH"></div>
+    <div id="ENLog"></div>
+    <div id="ZHLog"></div>
+    
+    <div class="cir" id="ZHchar" onclick="go()"></div>
+    <div class="zhuyin">
+        <div class="bpmf-display" id="bpmfDisplay"></div>
+        <div class="tone-display" id="toneDisplay"></div>
+    </div>
+    <!-- <span class="background triangle-top" onclick="checkTone(1)"></span>
+    <span class="background triangle-left" onclick="checkTone(4)"></span>
+    <span class="background triangle-right" onclick="checkTone(2)"></span>
+    <span class="background triangle-bottom" onclick="checkTone(3)"></span> -->
+    
+    <span class="background tritop" onclick="checkTone(1)"></span>
+    <span class="background trileft" onclick="checkTone(4)"></span>
+    <span class="background triright" onclick="checkTone(2)"></span>
+    <span class="background tribottom" onclick="checkTone(3)"></span>
+
+</body>
+</html>
