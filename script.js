@@ -1,10 +1,55 @@
-keyboardInput = document.getElementById('keyboardInput');
-inputToZH = document.getElementById('inputToZH');
-ENLog = document.getElementById('ENLog');
-ZHLog = document.getElementById('ZHLog');
-ZHchar = document.getElementById('ZHchar');
-bpmfDisplay = document.getElementById('bpmfDisplay');
-toneDisplay = document.getElementById('toneDisplay');
+const keyboardInput = document.getElementById('keyboardInput');
+const inputToZH = document.getElementById('inputToZH');
+const ENLog = document.getElementById('ENLog');
+const ZHLog = document.getElementById('ZHLog');
+const ZHchar = document.getElementById('ZHchar');
+const bpmfDisplay = document.getElementById('bpmfDisplay');
+const toneDisplay = document.getElementById('toneDisplay');
+const letterFreq = document.getElementById('letterFreq')
+
+const bpmfChar = [
+    'ㄅ', 'ㄆ', 'ㄇ', 'ㄈ', 
+    'ㄉ', 'ㄊ', 'ㄋ', 'ㄌ', 
+    'ㄍ', 'ㄎ', 'ㄏ', 
+    'ㄐ', 'ㄑ', 'ㄒ', 
+    'ㄓ', 'ㄔ', 'ㄕ', 'ㄖ', 
+    'ㄗ', 'ㄘ', 'ㄙ', 
+    '一', 'ㄨ', 'ㄩ', 
+    'ㄚ', 'ㄛ', 'ㄜ', 'ㄝ', 
+    'ㄞ', 'ㄟ', 'ㄠ', 'ㄡ', 
+    'ㄢ', 'ㄣ', 'ㄤ', 'ㄥ', 
+    'ㄦ'
+  ]
+
+const bpmfData = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,]
+
+let chartSet = new Chart(letterFreq, {
+        type: 'bar',
+        data: {
+          labels: bpmfChar,
+          datasets: [{
+            label: '# of',
+            data: bpmfData,
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          },
+          maintainAspectRatio: false,
+        }
+});
+
+function UpdateChart(dat) {
+    let newData = dat;
+    //Changing Chart object data
+    chartSet.data.datasets[0].data = newData;
+    //Updating the chart
+    chartSet.update();
+ }
 
 let typingLength;
 nextType = 0
@@ -51,7 +96,7 @@ ZHkeyBindings = {
     '0': 'ㄢ',
     'p': 'ㄣ',
     ';': 'ㄤ',
-    '?': 'ㄥ',
+    '/': 'ㄥ',
     '-': 'ㄦ',
     ' ': ' '
 }
@@ -66,7 +111,8 @@ let currentZhu
 let currentTone
 let charQueue = []
 
-let success = new Audio("sfx/gong.wav");
+let success = new Audio("sfx/ding3.wav");
+let correct = new Audio("sfx/click2.wav")
 let failure = new Audio("sfx/ohno.wav");
 
 function loadJSON(){
@@ -206,7 +252,22 @@ function updateTyping(inp) {
     console.log(specificLetter);
     
     if (ZHkeyBindings[inp] == specificLetter) {
+        
         letterSpan.classList.add('complete')
+        correct.currentTime = 0;
+        correct.play();
+
+        if(bpmfChar.includes(ZHkeyBindings[inp])){
+            charIndex = bpmfChar.indexOf(ZHkeyBindings[inp]);
+            currentCount = bpmfData[charIndex]
+
+            currentCount++
+
+            bpmfData.splice(charIndex, 1, currentCount)
+
+            UpdateChart(bpmfData);
+        }
+
         if (nextType < typingLength - 1) {
             nextType ++;
         } else {

@@ -154,3 +154,13 @@ body {
 .complete {
     color: green;
 }
+
+.chart {
+    position: absolute;
+    bottom: 1vh;
+    width: 100vw;
+    height: 40vh;
+    z-index: 0;
+    font-weight: bold;
+    color: black;
+}
