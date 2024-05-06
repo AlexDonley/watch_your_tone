@@ -21,7 +21,19 @@ const bpmfChar = [
     'ㄦ'
   ]
 
+const lordsPrayer = "我們在天上的父,願人都尊祢的名為聖,願祢的國降臨,願祢的旨意行在地上,如同行在天上.我們日用的飲食,今日賜給我們,免我們的債,如同我們免了人的債,不叫我們遇見試探,救我們脫離兇惡,因為國度,權柄,榮耀,全是祢的,直到永遠.阿們"
+const LP1 = "我們在天上的父願人都尊祢的名為聖"
+
 const bpmfData = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,]
+
+Chart.defaults.font.size = 24;
+Chart.defaults.font.weight = "bold";
+Chart.defaults.color = "black";
+Chart.defaults.backgroundColor = "#ffffff";
+Chart.defaults.scaleShowLables = false;
+let queueCount
+let limit
+
 
 let chartSet = new Chart(letterFreq, {
         type: 'bar',
@@ -30,15 +42,34 @@ let chartSet = new Chart(letterFreq, {
           datasets: [{
             label: '# of',
             data: bpmfData,
-            borderWidth: 1
+            backgroundColor: "#0000ff",
+            // borderWidth: 2,
+            borderRadius: 4,
           }]
         },
         options: {
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          },
+            plugins:{
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        display: false
+                    },
+                    grid: {
+                        beginAtZero: true,
+                        // display: false
+                    },
+                },
+            },
           maintainAspectRatio: false,
         }
 });
@@ -53,8 +84,6 @@ function UpdateChart(dat) {
 
 let typingLength;
 nextType = 0
-
-//var data = hz-bpmf.csv.toObjects(csv);
 
 ZHkeyBindings = {
     '1': 'ㄅ',
@@ -159,9 +188,16 @@ function nextChar(){
     success.currentTime = 0;
     success.play();
     
-    N = Math.floor(Math.random() * 100);
-    currentChar = zhuyin[N].char;
-    currentZhu = zhuyin[N].bpmf;
+    currentChar = charQueue[queueCount];
+    console.log(queueCount, currentChar)
+
+    if (queueCount < limit){
+        var N = zhuyin.findIndex(obj => obj.char == currentChar);
+    } else {
+        var N = Math.floor(Math.random() * 100) + 100;
+        currentZhu = zhuyin[N].bpmf;
+    }
+        
     currentTone = findTone(currentZhu);
 
     console.log(currentChar + " " + currentZhu + " " + currentTone)
@@ -169,6 +205,8 @@ function nextChar(){
     ZHchar.innerHTML = currentChar;
 
     insertZhuyin(currentZhu);
+
+    queueCount ++;
 }
 
 function insertZhuyin(zhu) {
@@ -278,3 +316,13 @@ function updateTyping(inp) {
         }
     }
 }
+
+function createQueue(arr) {
+    queueCount = 0;
+    limit = arr.length;
+    
+    charQueue = arr.split('');
+    console.log(charQueue);
+}
+
+createQueue(LP1);
