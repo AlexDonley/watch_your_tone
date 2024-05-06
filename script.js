@@ -1,7 +1,7 @@
 const keyboardInput = document.getElementById('keyboardInput');
 const inputToZH = document.getElementById('inputToZH');
-const ENLog = document.getElementById('ENLog');
-const ZHLog = document.getElementById('ZHLog');
+// const ENLog = document.getElementById('ENLog');
+// const ZHLog = document.getElementById('ZHLog');
 const ZHchar = document.getElementById('ZHchar');
 const bpmfDisplay = document.getElementById('bpmfDisplay');
 const toneDisplay = document.getElementById('toneDisplay');
@@ -143,8 +143,8 @@ window.addEventListener('keydown', (ev) =>{
     keyboardInput.innerHTML = input.toLowerCase();
     inputToZH.innerHTML = ZHinput;
 
-    ENLog.innerHTML += input;
-    ZHLog.innerHTML += ZHinput;
+    // ENLog.innerHTML += input;
+    // ZHLog.innerHTML += ZHinput;
 
 })
 
