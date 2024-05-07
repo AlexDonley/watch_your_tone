@@ -188,13 +188,18 @@ function nextChar(){
     success.currentTime = 0;
     success.play();
     
-    currentChar = charQueue[queueCount];
     console.log(queueCount, currentChar)
 
     if (queueCount < limit){
+
+        currentChar = charQueue[queueCount];
         var N = zhuyin.findIndex(obj => obj.char == currentChar);
+
     } else {
+
         var N = Math.floor(Math.random() * 100) + 100;
+        currentChar = charQueue[N];
+
     }
     
     currentZhu = zhuyin[N].bpmf;
