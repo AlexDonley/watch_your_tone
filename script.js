@@ -198,7 +198,7 @@ function nextChar(){
     } else {
 
         var N = Math.floor(Math.random() * 100) + 100;
-        currentChar = charQueue[N];
+        currentChar = zhuyin[N].char;
 
     }
     
