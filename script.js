@@ -195,9 +195,9 @@ function nextChar(){
         var N = zhuyin.findIndex(obj => obj.char == currentChar);
     } else {
         var N = Math.floor(Math.random() * 100) + 100;
-        currentZhu = zhuyin[N].bpmf;
     }
-        
+    
+    currentZhu = zhuyin[N].bpmf;
     currentTone = findTone(currentZhu);
 
     console.log(currentChar + " " + currentZhu + " " + currentTone)
