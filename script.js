@@ -5,7 +5,15 @@ const inputToZH = document.getElementById('inputToZH');
 const ZHchar = document.getElementById('ZHchar');
 const bpmfDisplay = document.getElementById('bpmfDisplay');
 const toneDisplay = document.getElementById('toneDisplay');
-const letterFreq = document.getElementById('letterFreq')
+const letterFreq = document.getElementById('letterFreq');
+
+const triangles = Array.from(document.getElementsByClassName('background'))
+const chartWrap = document.getElementById('chartWrap');
+const ZHwrap = document.getElementById('ZHwrap');
+
+var toneErrors = {};
+var typeErrors = {};
+var logErrors = false;
 
 const bpmfChar = [
     'ㄅ', 'ㄆ', 'ㄇ', 'ㄈ', 
@@ -185,6 +193,10 @@ function go(){
 }
 
 function nextChar(){
+    triangles.forEach(tri =>{
+        tri.classList.remove('disappear')
+    })
+    
     success.currentTime = 0;
     success.play();
     
@@ -198,7 +210,7 @@ function nextChar(){
     } else {
 
         var N = Math.floor(Math.random() * 100) + 100;
-        currentChar = zhuyin[N].char;
+        currentChar = charQueue[N];
 
     }
     
@@ -263,6 +275,27 @@ function checkTone(input){
     } else {
         failure.currentTime = 0;
         failure.play();
+
+        triangles[input - 1].classList.add('disappear');
+
+        if (logErrors === true){
+            
+            if (Object.keys(toneErrors).includes(currentChar)){
+                inputArray = toneErrors[currentChar];
+                if (!inputArray.includes(input)){
+                    inputArray.push(input);
+                }
+                
+                console.log(inputArray);
+            } else {
+                inputArray = [input]
+            }
+
+            toneErrors[currentChar] = inputArray;
+            console.log(toneErrors)
+
+            
+        }
     }
 }
 
@@ -331,3 +364,27 @@ function createQueue(arr) {
 }
 
 createQueue(LP1);
+
+function toggleTriangles() {
+    if (triangles[0].classList.contains('disappear')) {
+        triangles.forEach(tri =>{
+            tri.classList.remove('disappear')
+        })
+
+        chartWrap.classList.add('disappear')
+        ZHwrap.classList.add('disappear')
+
+    } else {
+        triangles.forEach(tri =>{
+            tri.classList.add('disappear')
+        })
+        
+        chartWrap.classList.remove('disappear')
+        ZHwrap.classList.remove('disappear')
+    }
+}
+
+function toggleErrors(){
+    logErrors = !logErrors;
+    console.log(logErrors)
+}

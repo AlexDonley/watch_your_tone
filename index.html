@@ -9,27 +9,30 @@
     <title>Watch Your Tone</title>
 </head>
 <body>
-    <div id="keyboardInput"></div>
-    <div id="inputToZH"></div>
+    <button onclick="toggleTriangles()">M</button>
+    <button onclick="toggleErrors()">E</button>
+    <!-- <div id="keyboardInput"></div>
+    <div id="inputToZH"></div> -->
     <!-- <div id="ENLog"></div>
     <div id="ZHLog"></div> -->
     
     <div class="cir" id="ZHchar" onclick="go()"></div>
-    <div class="zhuyin">
+    <div class="zhuyin disappear" id="ZHwrap">
         <div class="bpmf-display" id="bpmfDisplay"></div>
         <div class="tone-display" id="toneDisplay"></div>
     </div>
+
     <!-- <span class="background triangle-top" onclick="checkTone(1)"></span>
     <span class="background triangle-left" onclick="checkTone(4)"></span>
     <span class="background triangle-right" onclick="checkTone(2)"></span>
     <span class="background triangle-bottom" onclick="checkTone(3)"></span> -->
     
-    <span class="background tritop" onclick="checkTone(1)"></span>
-    <span class="background trileft" onclick="checkTone(4)"></span>
+    <span class="background tritop" onclick="checkTone(1)" id="topTri"></span>
     <span class="background triright" onclick="checkTone(2)"></span>
     <span class="background tribottom" onclick="checkTone(3)"></span>
+    <span class="background trileft" onclick="checkTone(4)"></span>
     
-    <div class="chart">
+    <div class="chart disappear" id="chartWrap">
         <canvas id="letterFreq"></canvas>
     </div>
     
