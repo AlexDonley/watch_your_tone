@@ -1,5 +1,5 @@
-const keyboardInput = document.getElementById('keyboardInput');
-const inputToZH = document.getElementById('inputToZH');
+// const keyboardInput = document.getElementById('keyboardInput');
+// const inputToZH = document.getElementById('inputToZH');
 // const ENLog = document.getElementById('ENLog');
 // const ZHLog = document.getElementById('ZHLog');
 const ZHchar = document.getElementById('ZHchar');
@@ -177,8 +177,8 @@ window.addEventListener('keydown', (ev) =>{
     input = ev.key.toLowerCase();
     ZHinput = ZHkeyBindings[input]
 
-    keyboardInput.innerHTML = input.toLowerCase();
-    inputToZH.innerHTML = ZHinput;
+    // keyboardInput.innerHTML = input.toLowerCase();
+    // inputToZH.innerHTML = ZHinput;
 
     // ENLog.innerHTML += input;
     // ZHLog.innerHTML += ZHinput;
@@ -193,9 +193,13 @@ function go(){
 }
 
 function nextChar(){
-    triangles.forEach(tri =>{
-        tri.classList.remove('disappear')
-    })
+    
+    if(chartWrap.classList.contains('disappear')){
+        triangles.forEach(tri =>{
+            tri.classList.remove('disappear')
+        })
+    }
+
     
     success.currentTime = 0;
     success.play();
@@ -210,7 +214,7 @@ function nextChar(){
     } else {
 
         var N = Math.floor(Math.random() * 100) + 100;
-        currentChar = charQueue[N];
+        currentChar = zhuyin[N].char;
 
     }
     
