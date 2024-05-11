@@ -1,16 +1,14 @@
-// const keyboardInput = document.getElementById('keyboardInput');
-// const inputToZH = document.getElementById('inputToZH');
-// const ENLog = document.getElementById('ENLog');
-// const ZHLog = document.getElementById('ZHLog');
 const ZHchar = document.getElementById('ZHchar');
 const bpmfDisplay = document.getElementById('bpmfDisplay');
 const toneDisplay = document.getElementById('toneDisplay');
 const letterFreq = document.getElementById('letterFreq');
 
 const triangles = Array.from(document.getElementsByClassName('background'))
+const onloads = Array.from(document.getElementsByClassName('onload'))
 const chartWrap = document.getElementById('chartWrap');
 const ZHwrap = document.getElementById('ZHwrap');
 const userText = document.getElementById('userText')
+const menu = document.getElementById('menu')
 
 var toneErrors = {};
 var typeErrors = {};
@@ -154,6 +152,9 @@ let success = new Audio("sfx/ding3.wav");
 let correct = new Audio("sfx/click2.wav")
 let failure = new Audio("sfx/ohno.wav");
 
+let calibrate = false;
+let calibrateCount = 1;
+
 function loadJSON(){
     fetch('./JSON/hz-bpmf.json')
     .then(res => {
@@ -180,19 +181,13 @@ function loadJSON(){
 
 loadJSON();
 
-window.addEventListener('keydown', (ev) =>{
-    input = ev.key.toLowerCase();
-    ZHinput = ZHkeyBindings[input]
-
-    // keyboardInput.innerHTML = input.toLowerCase();
-    // inputToZH.innerHTML = ZHinput;
-
-    // ENLog.innerHTML += input;
-    // ZHLog.innerHTML += ZHinput;
-
-})
-
 function go(){
+    console.log("go")
+    
+    if(ZHchar.classList.contains('disappear')) {
+        ZHchar.classList.remove('disappear')
+    }
+
     if (ZHchar.innerHTML == '') {
         userInput = userText.value;
         createQueue(userInput);
@@ -282,40 +277,61 @@ function findTone(str){
 }
 
 function checkTone(input){
-        
-    if (input == currentTone){
-        nextChar();
-    } else {
-        failure.currentTime = 0;
-        failure.play();
+    
+    if(calibrate === false) {
+        if (calibrateCount == input) {
+            
+            onloads[input - 1].classList.add('disappear');
+            onloads[input - 1].classList.remove('onload');
 
-        if (input < 5) {
-            triangles[input - 1].classList.add('disappear');
+            let chord = new Audio("sfx/" + input + ".wav");
+            chord.play();
+
+            calibrateCount++;
+        } 
+        if (calibrateCount > 5) {
+            ZHchar.innerHTML = '';
+            calibrate = true;
+            menu.classList.remove('disappear');
         }
 
-        if (logErrors === true){
+    } else {
+        if (input == currentTone){
+            nextChar();
             
-            if (Object.keys(toneErrors).includes(currentChar)){
-                inputArray = toneErrors[currentChar];
-                if (!inputArray.includes(input)){
-                    inputArray.push(input);
-                }
-                
-                console.log(inputArray);
-            } else {
-                inputArray = [input]
+        } else {
+            failure.currentTime = 0;
+            failure.play();
+
+            if (input < 5) {
+                triangles[input - 1].classList.add('disappear');
             }
 
-            toneErrors[currentChar] = inputArray;
-            console.log(toneErrors)
+            if (logErrors === true){
+                
+                if (Object.keys(toneErrors).includes(currentChar)){
+                    inputArray = toneErrors[currentChar];
+                    if (!inputArray.includes(input)){
+                        inputArray.push(input);
+                    }
+                    
+                    console.log(inputArray);
+                } else {
+                    inputArray = [input]
+                }
 
-            
+                toneErrors[currentChar] = inputArray;
+                console.log(toneErrors)
+            }
         }
     }
 }
 
 window.addEventListener('keydown', (ev) =>{
     //console.log(ev)
+    input = ev.key.toLowerCase();
+    ZHinput = ZHkeyBindings[input]
+
     if (ev.key == 'ArrowUp' || ev.key == 'PageUp'){
         checkTone(1);
     } else if (ev.key == 'ArrowDown'|| ev.key == 'PageDown'){

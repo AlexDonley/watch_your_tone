@@ -9,34 +9,27 @@
     <title>Watch Your Tone</title>
 </head>
 <body>
-    <button onclick="toggleTriangles()" onmousedown="event.preventDefault();">M</button>
-    <button onclick="toggleErrors()" onmousedown="event.preventDefault();">E</button>
-    <button onclick="go()" onmousedown="event.preventDefault();">G</button>
+    <div class="menu disappear" id="menu">
+        <button onclick="toggleTriangles()" onmousedown="event.preventDefault();">M</button>
+        <button onclick="toggleErrors()" onmousedown="event.preventDefault();">E</button>
+        <button onclick="go()" onmousedown="event.preventDefault();">G</button>
+        
+        <textarea class="text-input" id="userText">世界八大不可相信英國研究中國製造台灣報導南韓起源北韓宣布美國力挺菲國道歉大馬選舉</textarea>
+    </div>
 
-    <!-- <div id="keyboardInput"></div>
-    <div id="inputToZH"></div> -->
-    <!-- <div id="ENLog"></div>
-    <div id="ZHLog"></div> -->
-    
-    <textarea class="text-input" id="userText">世界八大不可相信英國研究中國製造台灣報導南韓起源北韓宣布美國力挺菲國道歉大馬選舉</textarea>
-    
 
-    <div class="cir" id="ZHchar" onclick="checkTone(5)"></div>
-    <div class="zhuyin disappear" id="ZHwrap">
+    
+    <span class="background tri tritop onload" onclick="checkTone(1)">1</span>
+    <span class="background tri triright onload" onclick="checkTone(2)">2</span>
+    <span class="background tri tribottom onload" onclick="checkTone(3)">3</span>
+    <span class="background tri trileft onload" onclick="checkTone(4)">4</span>
+    
+    <div class="cir glass onload" id="ZHchar" onclick="checkTone(5)">5</div>
+    <div class="zhuyin glass disappear" id="ZHwrap">
         <div class="bpmf-display" id="bpmfDisplay"></div>
         <div class="tone-display" id="toneDisplay"></div>
     </div>
 
-    <!-- <span class="background triangle-top" onclick="checkTone(1)"></span>
-    <span class="background triangle-left" onclick="checkTone(4)"></span>
-    <span class="background triangle-right" onclick="checkTone(2)"></span>
-    <span class="background triangle-bottom" onclick="checkTone(3)"></span> -->
-    
-    <span class="background tritop" onclick="checkTone(1)" id="topTri"></span>
-    <span class="background triright" onclick="checkTone(2)"></span>
-    <span class="background tribottom" onclick="checkTone(3)"></span>
-    <span class="background trileft" onclick="checkTone(4)"></span>
-    
     <div class="chart disappear" id="chartWrap">
         <canvas id="letterFreq"></canvas>
     </div>
