@@ -10,10 +10,11 @@ const letterFreq = document.getElementById('letterFreq');
 const triangles = Array.from(document.getElementsByClassName('background'))
 const chartWrap = document.getElementById('chartWrap');
 const ZHwrap = document.getElementById('ZHwrap');
+const userText = document.getElementById('userText')
 
 var toneErrors = {};
 var typeErrors = {};
-var logErrors = false;
+var logErrors = true;
 
 const bpmfChar = [
     'ㄅ', 'ㄆ', 'ㄇ', 'ㄈ', 
@@ -31,6 +32,7 @@ const bpmfChar = [
 
 const lordsPrayer = "我們在天上的父,願人都尊祢的名為聖,願祢的國降臨,願祢的旨意行在地上,如同行在天上.我們日用的飲食,今日賜給我們,免我們的債,如同我們免了人的債,不叫我們遇見試探,救我們脫離兇惡,因為國度,權柄,榮耀,全是祢的,直到永遠.阿們"
 const LP1 = "我們在天上的父願人都尊祢的名為聖"
+const memeText = "世界八大不可相信英國研究中國製造台灣報導南韓起源北韓宣布美國力挺菲國道歉大馬選舉"
 
 const bpmfData = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,]
 
@@ -186,8 +188,10 @@ window.addEventListener('keydown', (ev) =>{
 })
 
 function go(){
-    
     if (ZHchar.innerHTML == '') {
+        userInput = userText.value;
+        createQueue(userInput);
+        userText.classList.add('disappear');
         nextChar();
     }
 }
@@ -280,7 +284,9 @@ function checkTone(input){
         failure.currentTime = 0;
         failure.play();
 
-        triangles[input - 1].classList.add('disappear');
+        if (input < 5) {
+            triangles[input - 1].classList.add('disappear');
+        }
 
         if (logErrors === true){
             
@@ -359,11 +365,11 @@ function updateTyping(inp) {
     }
 }
 
-function createQueue(arr) {
+function createQueue(str) {
     queueCount = 0;
-    limit = arr.length;
+    limit = str.length;
     
-    charQueue = arr.split('');
+    charQueue = str.split('');
     console.log(charQueue);
 }
 

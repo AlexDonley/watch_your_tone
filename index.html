@@ -9,14 +9,19 @@
     <title>Watch Your Tone</title>
 </head>
 <body>
-    <button onclick="toggleTriangles()">M</button>
-    <button onclick="toggleErrors()">E</button>
+    <button onclick="toggleTriangles()" onmousedown="event.preventDefault();">M</button>
+    <button onclick="toggleErrors()" onmousedown="event.preventDefault();">E</button>
+    <button onclick="go()" onmousedown="event.preventDefault();">G</button>
+
     <!-- <div id="keyboardInput"></div>
     <div id="inputToZH"></div> -->
     <!-- <div id="ENLog"></div>
     <div id="ZHLog"></div> -->
     
-    <div class="cir" id="ZHchar" onclick="go()"></div>
+    <textarea class="text-input" id="userText">世界八大不可相信英國研究中國製造台灣報導南韓起源北韓宣布美國力挺菲國道歉大馬選舉</textarea>
+    
+
+    <div class="cir" id="ZHchar" onclick="checkTone(5)"></div>
     <div class="zhuyin disappear" id="ZHwrap">
         <div class="bpmf-display" id="bpmfDisplay"></div>
         <div class="tone-display" id="toneDisplay"></div>
