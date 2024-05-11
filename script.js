@@ -41,6 +41,7 @@ Chart.defaults.font.weight = "bold";
 Chart.defaults.color = "black";
 Chart.defaults.backgroundColor = "#ffffff";
 Chart.defaults.scaleShowLables = false;
+
 let queueCount
 let limit
 
@@ -140,15 +141,14 @@ ZHkeyBindings = {
     ' ': ' '
 }
 
-console.log(ZHkeyBindings['1'])
+let zhuyinKeys;
+let chineseChars = [];
 
-let zhuyin
-let example
 let N;
-let currentChar
-let currentZhu
-let currentTone
-let charQueue = []
+let currentChar;
+let currentZhu;
+let currentTone;
+let charQueue = [];
 
 let success = new Audio("sfx/ding3.wav");
 let correct = new Audio("sfx/click2.wav")
@@ -165,9 +165,14 @@ function loadJSON(){
         return res.json()
     })
     .then(data => {
-        zhuyin = data;
-        console.log(data)
-        example = zhuyin.findIndex(item => item.char === "不")
+        zhuyinKeys = data;
+        // chineseChars = Object.keys(data).map(key => data[key]);
+
+        for (var key in data) {
+            chineseChars.push(data[key].char);
+        }
+
+        console.log(chineseChars)
     })
     .catch(error => console.log('ERROR'))
 
@@ -213,16 +218,16 @@ function nextChar(){
     if (queueCount < limit){
 
         currentChar = charQueue[queueCount];
-        var N = zhuyin.findIndex(obj => obj.char == currentChar);
+        var N = zhuyinKeys.findIndex(obj => obj.char == currentChar);
 
     } else {
 
         var N = Math.floor(Math.random() * 100) + 100;
-        currentChar = zhuyin[N].char;
+        currentChar = zhuyinKeys[N].char;
 
     }
     
-    currentZhu = zhuyin[N].bpmf;
+    currentZhu = zhuyinKeys[N].bpmf[0];
     currentTone = findTone(currentZhu);
 
     console.log(currentChar + " " + currentZhu + " " + currentTone)
@@ -370,10 +375,16 @@ function createQueue(str) {
     limit = str.length;
     
     charQueue = str.split('');
+
+    for (var n = 0; n < charQueue.length; n++){
+        if (!chineseChars.includes(charQueue[n])){
+            charQueue.splice(n, 1);
+            n--
+        }
+    }
+
     console.log(charQueue);
 }
-
-createQueue(LP1);
 
 function toggleTriangles() {
     if (triangles[0].classList.contains('disappear')) {
