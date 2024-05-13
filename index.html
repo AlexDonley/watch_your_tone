@@ -12,17 +12,18 @@
     <div class="menu disappear" id="menu">
         <button onclick="toggleTriangles()" onmousedown="event.preventDefault();">M</button>
         <button onclick="toggleErrors()" onmousedown="event.preventDefault();">E</button>
-        <button onclick="go()" onmousedown="event.preventDefault();">G</button>
+        <button onclick="toggleHint()" onmousedown="event.preventDefault();">H</button>
+        <button onclick="go()" onmousedown="event.preventDefault();">Go</button>
         
         <textarea class="text-input" id="userText">世界八大不可相信英國研究中國製造台灣報導南韓起源北韓宣布美國力挺菲國道歉大馬選舉</textarea>
     </div>
 
 
     
-    <span class="background tri tritop onload" onclick="checkTone(1)">1</span>
-    <span class="background tri triright onload" onclick="checkTone(2)">2</span>
-    <span class="background tri tribottom onload" onclick="checkTone(3)">3</span>
-    <span class="background tri trileft onload" onclick="checkTone(4)">4</span>
+    <span class="tri tritop onload" onclick="checkTone(1)">1</span>
+    <span class="tri triright onload" onclick="checkTone(2)">2</span>
+    <span class="tri tribottom onload" onclick="checkTone(3)">3</span>
+    <span class="tri trileft onload" onclick="checkTone(4)">4</span>
     
     <div class="cir glass onload" id="ZHchar" onclick="checkTone(5)">5</div>
     <div class="zhuyin glass disappear" id="ZHwrap">
@@ -32,6 +33,10 @@
 
     <div class="chart disappear" id="chartWrap">
         <canvas id="letterFreq"></canvas>
+    </div>
+
+    <div class="errors disappear" id="errorsWrap">
+        <canvas class="error-wrap" id="errors"></canvas>
     </div>
     
 </body>

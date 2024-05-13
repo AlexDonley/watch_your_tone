@@ -2,9 +2,12 @@ const ZHchar = document.getElementById('ZHchar');
 const bpmfDisplay = document.getElementById('bpmfDisplay');
 const toneDisplay = document.getElementById('toneDisplay');
 const letterFreq = document.getElementById('letterFreq');
+const errorsWrap = document.getElementById('errorsWrap')
+const errors = document.getElementById('errors')
 
-const triangles = Array.from(document.getElementsByClassName('background'))
+const triangles = Array.from(document.getElementsByClassName('tri'))
 const onloads = Array.from(document.getElementsByClassName('onload'))
+const buttons = Array.from(document.getElementsByTagName('button'))
 const chartWrap = document.getElementById('chartWrap');
 const ZHwrap = document.getElementById('ZHwrap');
 const userText = document.getElementById('userText')
@@ -37,12 +40,10 @@ const bpmfData = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 Chart.defaults.font.size = 24;
 Chart.defaults.font.weight = "bold";
 Chart.defaults.color = "black";
-Chart.defaults.backgroundColor = "#ffffff";
 Chart.defaults.scaleShowLables = false;
 
 let queueCount
 let limit
-
 
 let chartSet = new Chart(letterFreq, {
         type: 'bar',
@@ -83,13 +84,46 @@ let chartSet = new Chart(letterFreq, {
         }
 });
 
+let chartErrors = new Chart(errors, {
+    type: 'doughnut',
+    data: {
+        labels: ['re-learn', 'needs practice', 'brain fart', 'perfect'],
+        datasets: [{
+            label: '# of',
+            data: [0, 0, 0, 1],
+            backgroundColor: ['red', 'orange', 'yellow', 'limegreen'],
+            borderWidth: 0,
+            // borderRadius: 4,
+            cutout: '70%',
+        }]
+        },
+    options: {
+        plugins:{
+            legend: {
+                display: false
+            }
+        },
+    }
+})
+
 function UpdateChart(dat) {
     let newData = dat;
-    //Changing Chart object data
+    
+    //Changing bar chart object data
     chartSet.data.datasets[0].data = newData;
+    
     //Updating the chart
     chartSet.update();
- }
+}
+
+function updateDonut(arr) {
+    
+    //Changing donut chart object data
+    chartErrors.data.datasets[0].data = returnErrorsArray(arr);
+    
+    //Updating the chart
+    chartErrors.update();
+}
 
 let typingLength;
 nextType = 0
@@ -284,7 +318,7 @@ function checkTone(input){
             onloads[input - 1].classList.add('disappear');
             onloads[input - 1].classList.remove('onload');
 
-            let chord = new Audio("sfx/" + input + ".wav");
+            let chord = new Audio("sfx/" + input + ".webm");
             chord.play();
 
             calibrateCount++;
@@ -299,6 +333,8 @@ function checkTone(input){
         if (input == currentTone){
             nextChar();
             
+            updateDonut(queueCount - 1)
+
         } else {
             failure.currentTime = 0;
             failure.play();
@@ -321,8 +357,10 @@ function checkTone(input){
                 }
 
                 toneErrors[currentChar] = inputArray;
-                console.log(toneErrors)
+                
             }
+
+            updateDonut(queueCount)
         }
     }
 }
@@ -392,6 +430,8 @@ function createQueue(str) {
     
     charQueue = str.split('');
 
+    // filter out any characters not found in the dataset
+
     for (var n = 0; n < charQueue.length; n++){
         if (!chineseChars.includes(charQueue[n])){
             charQueue.splice(n, 1);
@@ -409,7 +449,6 @@ function toggleTriangles() {
         })
 
         chartWrap.classList.add('disappear')
-        ZHwrap.classList.add('disappear')
 
     } else {
         triangles.forEach(tri =>{
@@ -417,11 +456,62 @@ function toggleTriangles() {
         })
         
         chartWrap.classList.remove('disappear')
-        ZHwrap.classList.remove('disappear')
     }
 }
 
 function toggleErrors(){
-    logErrors = !logErrors;
-    console.log(logErrors)
+    if (errorsWrap.classList.contains('disappear')) {
+        errorsWrap.classList.remove('disappear');
+        buttons[1].classList.add('flip');
+    } else {
+        errorsWrap.classList.add('disappear');
+        buttons[1].classList.remove('flip');
+    }
+    
+    // logErrors = !logErrors;
+    // console.log(logErrors)
+}
+
+function toggleHint(){
+    if (ZHwrap.classList.contains('disappear')) {
+        ZHwrap.classList.remove('disappear');
+        buttons[2].classList.add('flip');
+    } else {
+        ZHwrap.classList.add('disappear');
+        buttons[2].classList.remove('flip');
+    }
+}
+
+function returnErrorsArray(total){
+    let brainFart = [];
+    let practiceMore = [];
+    let reLearn = [];
+    
+
+    //index = Object.keys(toneErrors);
+
+    for (const key in toneErrors) {
+        numberOfErrors = toneErrors[key].length;
+        console.log(numberOfErrors)
+
+        if (numberOfErrors < 2) {
+            brainFart.push(key);
+        } else if (numberOfErrors == 2) {
+            practiceMore.push(key);
+        } else {
+            reLearn.push(key);
+        }
+    }
+    console.log(reLearn, practiceMore, brainFart);
+
+    bfTally = brainFart.length;
+    pmTally = practiceMore.length;
+    rlTally = reLearn.length;
+
+    totalErrors = bfTally + pmTally + rlTally;
+    correctTally = total - totalErrors;
+    finalTally = [rlTally, pmTally, bfTally, correctTally];
+
+    console.log(finalTally)
+    return finalTally;
 }
