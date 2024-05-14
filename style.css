@@ -7,14 +7,6 @@ body {
     font-family: century gothic, sans-serif;
 }
 
-.glass {
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(7px);
-    -webkit-backdrop-filter: blur(7px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    background: rgb(255, 255, 255, 0.432);
-}
-
 .text-input{
     height: 40vh;
     width: 40vh;
@@ -37,12 +29,6 @@ body {
     font-size: 15vh;
     text-align: center;
     vertical-align: middle;
-    /* text-shadow: black 0 0 8px;
-    filter: drop-shadow(0px 0px 4px #0f0f0f); */
-    text-shadow: 0px 1px 0 #333, 0 2px 0 #333,
-                1px 3px 0 #333, 1px 4px 0 #333,
-                2px 5px 0 #333, 2px 6px 0 #333,
-                0 7px 8px rgba(0, 0, 0, .5);
 }
 
 .tritop{
@@ -112,7 +98,7 @@ body {
 }
 
 .cir {
-    z-index: -2;
+    z-index: 0;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -120,20 +106,28 @@ body {
     width: 200px;
     height: 200px;
     border-radius: 50%;
-    color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
+    background-color: #ccc;
     text-align: center;
     vertical-align: middle;
     line-height: 200px;
     font-size: 8rem;
-    font-weight: bold;
+    filter: drop-shadow(0px 0px 4px #0f0f0f);
+    /* font-weight: bold; */
     transition: opacity 0.5s ease-in-out;
 }
 .cir.disappear {
-    opacity: 0;
+    opacity: 1;
+}
+.offset{
+    transform: translate(100px, 100px);
+    /* background-color: white;
+    filter: drop-shadow(0px 0px 0px #fff);
+    color: #ccc; */
 }
 
 .zhuyin{
-    z-index: -1;
+    z-index: 1;
     position: absolute;
     top: 50%;
     right: calc(50% - 100px);
@@ -141,13 +135,8 @@ body {
     height: 200px;
     transform: translateX(50%) translateY(-50%);
     border-radius: 30px;
-    /* background-color: rgba(0, 0, 0, 0.6);
-    color: rgb(255, 255, 255); */
-    color: black;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(7px);
-    -webkit-backdrop-filter: blur(7px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    background-color: #aaa;
     display: flex;
     transition: right 0.5s ease-in-out,
                 visibility 0s;
@@ -181,7 +170,7 @@ body {
 }
 
 .complete {
-    color: green;
+    color: lightgreen;
 }
 
 .chart {
@@ -207,6 +196,9 @@ button {
     border: none;
     background-color: white;
     font-size: 2rem;
+    line-height: 50px;
+    justify-content: center;
+    text-align: middle;
 }
 button.flip{
     color: white;
@@ -236,8 +228,8 @@ button.flip{
 
 .errors { 
     z-index: -3;
-    height: 280px;
-    width: 280px;
+    height: 230px;
+    width: 230px;
     position: absolute;
     top: 50vh;
     left: 50vw;
@@ -251,6 +243,37 @@ button.flip{
                 opacity 0.2s linear;
     visibility: hidden;
     opacity: 0;
+}
+
+.glass {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgb(255, 255, 255, 0.432);
+}
+
+.emboss-text{
+    text-shadow: 0px 1px 0 #333, 0 2px 0 #333,
+                1px 3px 0 #333, 1px 4px 0 #333,
+                2px 5px 0 #333, 2px 6px 0 #333;
+    /* text-shadow: 0px 1px 0 rgba(0, 0, 0, 0.2), 0 2px 0 rgba(0, 0, 0, 0.2),
+                1px 3px 0 rgba(0, 0, 0, 0.2), 1px 4px 0 rgba(0, 0, 0, 0.2),
+                2px 5px 0 rgba(0, 0, 0, 0.2), 2px 6px 0 rgba(0, 0, 0, 0.2); */
+    transition: all .3s ease-in-out;
+}
+.emboss-text:hover{
+    text-shadow: 0px 1px 0 #333, 0 2px 0 #333,
+    1px 3px 0 #333, 1px 4px 0 #333,
+    2px 5px 0 #333, 2px 6px 0 #333,
+    3px 7px 0 #333, 3px 8px 0 #333,
+    4px 9px 0 #333, 4px 10px 0 #333;
+    color: white;
+}
+.mini-emboss-text{
+    text-shadow: 0px 1px 0 #333, 0 2px 0 #333,
+                1px 3px 0 #333, 1px 4px 0 #333;
+    filter: drop-shadow(0px 0px 4px #0f0f0f);
 }
 /* .error-chart{
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
