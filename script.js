@@ -13,9 +13,15 @@ const ZHwrap = document.getElementById('ZHwrap');
 const userText = document.getElementById('userText')
 const menu = document.getElementById('menu')
 
+const spanLabels = [
+    ['1', '2', '3', '4', '5'],
+    ['_', 'ˊ', 'ˇ', 'ˋ', '˙']
+]
+
 var toneErrors = {};
 var typeErrors = {};
 var logErrors = true;
+var speechBool = false;
 
 let queueCount
 let limit
@@ -242,7 +248,7 @@ function nextChar(){
         })
     }
     
-    console.log(queueCount, currentChar)
+    // console.log(queueCount, currentChar)
 
     if (queueCount < limit){
 
@@ -262,6 +268,10 @@ function nextChar(){
     console.log(currentChar + " " + currentZhu + " " + currentTone)
 
     ZHchar.innerHTML = currentChar;
+
+    if (speechBool === true) {
+        speakWords(currentChar);
+    }
 
     insertZhuyin(currentZhu);
 
@@ -500,6 +510,26 @@ function toggleHint(){
     }
 }
 
+function toggleShuffle(){
+    if (!buttons[3].classList.contains('flip')) {
+        
+        //buttons[3].classList.add('flip');
+    } else {
+        
+        //buttons[3].classList.remove('flip');
+    }
+}
+
+function toggleSpeech(){
+    if (!buttons[4].classList.contains('flip')) {
+        speechBool = true;
+        buttons[4].classList.add('flip');
+    } else {
+        speechBool = false;
+        buttons[4].classList.remove('flip');
+    }
+}
+
 function returnErrorsArray(total){
     let brainFart = [];
     let practiceMore = [];
@@ -547,4 +577,12 @@ function showTextArea() {
     triangles.forEach(tri =>{
         tri.classList.add('disappear')
     })
+}
+
+function speakWords(str){
+    utterance = new SpeechSynthesisUtterance(str);
+    utterance.lang = "zh"
+    utterance.rate = .5;
+    
+    speechSynthesis.speak(utterance);
 }
