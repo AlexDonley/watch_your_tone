@@ -29,6 +29,13 @@ body {
     font-size: 15vh;
     text-align: center;
     vertical-align: middle;
+    transition: transform 0.5s ease-in-out,
+                visibility 0s 0s;
+}
+.tri.disappear{
+    transition: transform 0.5s ease-in-out,
+                visibility 0s 0.5s;
+    visibility: hidden;
 }
 
 .tritop{
@@ -39,15 +46,11 @@ body {
     color: #aa0000;
     background-color: maroon; 
     clip-path: polygon(1% 0%, 50% 98%, 99% 0%); 
-    transition: transform 0.5s ease-in-out;
     line-height: 40vh;
 }
 .tritop.disappear{
     transform: translateY(-50vh);
 }
-/* .tritop.glass{
-    background: rgb(255, 0, 0, 0.432);
-} */
 
 .trileft{
     position: absolute;
@@ -58,7 +61,6 @@ body {
     color: #00aaaa;
     background-color: darkcyan; 
     clip-path: polygon(0% 1%, 98% 50%, 0% 99%); 
-    transition: transform 0.5s ease-in-out;
     line-height: 100vh;
 }
 .trileft.disappear{
@@ -74,7 +76,6 @@ body {
     color: #ffcc00;
     background-color: orange; 
     clip-path: polygon(2% 50%, 100% 1%, 100% 99%); 
-    transition: transform 0.5s ease-in-out;
     line-height: 100vh;
 }
 .triright.disappear{
@@ -90,7 +91,6 @@ body {
     color: #22aa22;
     background-color: forestgreen; 
     clip-path: polygon(50% 2%, 1% 100%, 99% 100%); 
-    transition: transform 0.5s ease-in-out;
     line-height: 60vh;
 }
 .tribottom.disappear{

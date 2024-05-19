@@ -21,6 +21,7 @@ const spanLabels = [
 var toneErrors = {};
 var typeErrors = {};
 var logErrors = true;
+var shuffleBool = false;
 var speechBool = false;
 
 let queueCount
@@ -230,8 +231,13 @@ function go(){
 
     ZHchar.style.fontWeight = 'bold';
 
+    errorsWrap.classList.remove('disappear');
+    buttons[1].classList.add('flip');
+
     userInput = userText.value;
     createQueue(userInput);
+
+
 
     toneErrors = {};
     updateDonut(1);
@@ -269,13 +275,13 @@ function nextChar(){
 
     ZHchar.innerHTML = currentChar;
 
-    if (speechBool === true) {
-        speakWords(currentChar);
-    }
-
     insertZhuyin(currentZhu);
 
     queueCount ++;
+
+    if (speechBool === true) {
+        speakWords(currentChar);
+    }
 }
 
 function insertZhuyin(zhu) {
@@ -466,6 +472,10 @@ function createQueue(str) {
         }
     }
 
+    if (shuffleBool) {
+        charQueue = shuffle(charQueue);
+    }
+
     targetLength = charQueue.length;
     // console.log(charQueue);
 }
@@ -512,11 +522,11 @@ function toggleHint(){
 
 function toggleShuffle(){
     if (!buttons[3].classList.contains('flip')) {
-        
-        //buttons[3].classList.add('flip');
+        shuffleBool = true;
+        buttons[3].classList.add('flip');
     } else {
-        
-        //buttons[3].classList.remove('flip');
+        shuffleBool = false;
+        buttons[3].classList.remove('flip');
     }
 }
 
@@ -579,10 +589,28 @@ function showTextArea() {
     })
 }
 
-function speakWords(str){
+async function speakWords(str){
+    speechSetup = window.speechSynthesis;
+
+    speechSetup.cancel();
+    
     utterance = new SpeechSynthesisUtterance(str);
     utterance.lang = "zh"
-    utterance.rate = .5;
+    utterance.rate = .8;
     
-    speechSynthesis.speak(utterance);
+    speechSetup.speak(utterance);
+}
+
+function shuffle(arr){
+    let unshuffled = arr;
+    let shuffled = [];
+
+    unshuffled.forEach(word =>{
+        randomPos = Math.floor(Math.random() * shuffled.length);
+
+        shuffled.splice(randomPos, 0, word);
+    })
+    
+    console.log(shuffled);
+    return shuffled;
 }
