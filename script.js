@@ -23,6 +23,7 @@ var typeErrors = {};
 var logErrors = true;
 var shuffleBool = false;
 var speechBool = false;
+var mode = 1;
 
 let queueCount
 let limit
@@ -186,7 +187,7 @@ let chineseChars = [];
 
 let N;
 let currentChar;
-let currentZhu;
+let currentZY;
 let currentTone;
 let charQueue = [];
 
@@ -209,13 +210,11 @@ function loadJSON(){
     })
     .then(data => {
         zhuyinKeys = data;
-        // chineseChars = Object.keys(data).map(key => data[key]);
 
         for (var key in data) {
             chineseChars.push(data[key].char);
         }
 
-        console.log(chineseChars)
     })
     .catch(error => console.log('ERROR'))
 
@@ -224,11 +223,7 @@ function loadJSON(){
 loadJSON();
 
 function go(){
-        
-    // if(ZHchar.classList.contains('disappear')) {
-    //     ZHchar.classList.remove('disappear')
-    // }
-
+    
     ZHchar.style.fontWeight = 'bold';
 
     errorsWrap.classList.remove('disappear');
@@ -236,8 +231,6 @@ function go(){
 
     userInput = userText.value;
     createQueue(userInput);
-
-
 
     toneErrors = {};
     updateDonut(1);
@@ -248,13 +241,9 @@ function go(){
 
 function nextChar(){
     
-    if(chartWrap.classList.contains('disappear')){
-        triangles.forEach(tri =>{
-            tri.classList.remove('disappear')
-        })
+    if(mode == 1){
+        addTriangles()
     }
-    
-    // console.log(queueCount, currentChar)
 
     if (queueCount < limit){
 
@@ -268,14 +257,14 @@ function nextChar(){
 
     }
     
-    currentZhu = zhuyinKeys[N].bpmf[0];
-    currentTone = findTone(currentZhu);
+    currentZY = zhuyinKeys[N].bpmf[0];
+    currentTone = findTone(currentZY);
 
-    console.log(currentChar + " " + currentZhu + " " + currentTone)
+    console.log(currentChar + " " + currentZY + " " + currentTone)
 
     ZHchar.innerHTML = currentChar;
 
-    insertZhuyin(currentZhu);
+    insertZhuyin(currentZY);
 
     queueCount ++;
 
@@ -383,7 +372,7 @@ function checkTone(input){
                             inputArray.push(input);
                         }
                         
-                        console.log(inputArray);
+                        //console.log(inputArray);
                     } else {
                         inputArray = [input]
                     }
@@ -399,7 +388,7 @@ function checkTone(input){
 }
 
 window.addEventListener('keydown', (ev) =>{
-    //console.log(ev)
+    
     input = ev.key.toLowerCase();
     ZHinput = ZHkeyBindings[input]
 
@@ -414,7 +403,9 @@ window.addEventListener('keydown', (ev) =>{
     } else if (ev.key == 'Enter') {
         checkTone(5);
     } else {
-        updateTyping(ev.key)
+        if(mode == 2){
+            updateTyping(ev.key)
+        }
     }
 })
 
@@ -426,8 +417,6 @@ function updateTyping(inp) {
         letterSpan = document.getElementById('span' + nextType);
         specificLetter = letterSpan.innerText;
     }
-    
-    console.log(specificLetter);
     
     if (ZHkeyBindings[inp] == specificLetter) {
         
@@ -477,24 +466,35 @@ function createQueue(str) {
     }
 
     targetLength = charQueue.length;
-    // console.log(charQueue);
 }
 
-function toggleTriangles() {
-    if (triangles[0].classList.contains('disappear')) {
-        triangles.forEach(tri =>{
-            tri.classList.remove('disappear')
-        })
-
-        chartWrap.classList.add('disappear')
-
-    } else {
-        triangles.forEach(tri =>{
-            tri.classList.add('disappear')
-        })
-        
-        chartWrap.classList.remove('disappear')
+function cycleMode(){
+    if (mode == 1){
+        removeTriangles();
+        chartWrap.classList.remove('disappear');
+        mode = 2;
+    } else if (mode == 2) {
+        chartWrap.classList.add('disappear');
+        recognition.start();
+        mode = 3;
+    } else if (mode == 3) {
+        addTriangles();
+        recognition.abort();
+        mode = 1;
     }
+    buttons[0].innerText = mode;
+}
+
+function addTriangles() {
+    triangles.forEach(tri =>{
+        tri.classList.remove('disappear')
+    })
+}
+
+function removeTriangles() {
+    triangles.forEach(tri =>{
+        tri.classList.add('disappear')
+    })
 }
 
 function toggleErrors(){
@@ -611,6 +611,47 @@ function shuffle(arr){
         shuffled.splice(randomPos, 0, word);
     })
     
-    console.log(shuffled);
+    //console.log(shuffled);
     return shuffled;
 }
+
+window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+const recognition = new SpeechRecognition();
+recognition.interimResults = true;
+recognition.lang = 'zh';
+
+recognition.addEventListener("result", (e) => {
+  const text = Array.from(e.results)
+    .map((result) => result[0])
+    .map((result) => result.transcript)
+    .join("");
+
+  if (e.results[0].isFinal) {
+    array = text.split(''),
+    
+    array.forEach((element)=>{
+        if (isNaN(element)){
+            x = zhuyinKeys.findIndex(obj => obj.char == element);
+            y = zhuyinKeys[x].bpmf[0];
+            console.log(element, y);
+            
+            if (y == currentZY){
+                nextChar();
+            }
+
+        } else {
+            console.log(element);
+        }
+
+    })   
+  }
+});
+
+recognition.addEventListener("end", () => {
+  if(mode == 3){
+    recognition.start();
+  }
+});
+
+//recognition.start();
